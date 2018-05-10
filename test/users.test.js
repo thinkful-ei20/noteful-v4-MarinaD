@@ -156,15 +156,15 @@ describe('Noteful API - Users', function () {
       });
 
       it('Should reject users with duplicate username', function(){
-        const testUser1 = {username, password, fullname};
-        const testUser2 = {username,password,fullname};
-
-        // return User.create(testUser1)
-        //   .then(()=>{
-        //     return chai.request(app).post('/api/users').send(testUser2);
-        //   }).then(res => {
-        //     expect(res).to.have.status(200);
-        //   });
+        const testUser = {username, password, fullname};
+        
+        return User.create(testUser)
+          .then(()=>{
+            return chai.request(app).post('/api/users').send(testUser);
+          }).then(res => {
+            expect(res).to.have.status(422);
+            expect(res.body.message).to.be.equal('Username already exists');
+          });
       
       });
       it('Should trim fullname', function(){

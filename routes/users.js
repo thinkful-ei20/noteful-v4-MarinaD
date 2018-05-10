@@ -48,6 +48,15 @@ router.post('/', function(req,res,next){
     return next(err);
   }
 
+  User.findOne({username}).
+    then(res => {
+      if (res) {
+        const err = new Error('Username already exists');
+        err.status = 422;
+        return next(err);
+      }
+    });
+
   return User.hashPassword(password)
     .then(digest => {
       const newUser = {
@@ -62,10 +71,6 @@ router.post('/', function(req,res,next){
       else return next();
     })
     .catch(err => {
-      if (err.code === 11000) {
-        err = new Error('the username already exists');
-        err.status = 400;
-      }
       next(err);
     });
 });
