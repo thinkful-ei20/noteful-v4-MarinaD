@@ -123,7 +123,10 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
   const { id } = req.params;
   const userId = req.user.id;
-  const { title, content, folderId, tags = [] } = req.body;
+  const { title, content, tags = [] } = req.body;
+  let {folderId} = req.body;
+
+  if (folderId === '') folderId = undefined;
 
   /***** Never trust users - validate input *****/
   if (!mongoose.Types.ObjectId.isValid(id)) {
