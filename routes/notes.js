@@ -84,7 +84,8 @@ router.get('/:id', (req, res, next) => {
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
 
-  const { title, content, folderId, tags = [] } = req.body;
+  const { title, content, tags = [] } = req.body;
+  let {folderId} = req.body;
   const userId = req.user.id;
 
   /***** Never trust users - validate input *****/
@@ -93,6 +94,8 @@ router.post('/', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
+
+  if (folderId === '') folderId = undefined;
 
   if(folderId){
     validateId(Folder, folderId, userId, next);
